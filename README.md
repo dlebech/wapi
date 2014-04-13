@@ -4,9 +4,9 @@ wapi
 An exploration of the Web Audio API.
 Live version can be [found here](https://davidlebech.com/wapi).
 
-Inspired by a talk on live music coding by Jan Krutisch, this repository is an
-exploration of the Web Audio API and an attempt to understand music and audio
-synthesis a little better.
+Inspired by a talk on live music coding by [Jan Krutisch](https://github.com/halfbyte),
+this repository is an exploration of the Web Audio API and an attempt to
+understand music and audio synthesis a little better.
 
 The code is heavily commented as part of the learning process.
 
