@@ -132,6 +132,27 @@
         // reach the end. This is a good way of creating live sequencing by
         // having a single sequence and looping it.
         this.loop = true;
+
+        // The main mixer node. Instruments should always connect to this node
+        // instead of the context destination because the main mixer goes
+        // through a dynamic compressor that helps mitigate clipping issues
+        // when multiple sounds are playing at the same time.
+        //
+        // The mixer is set up in a separate function to avoid some timing
+        // issues.
+        this.mixer = null;
+    };
+
+    // Sets up the master audio mixer.
+    Wapi.prototype.setupMixer = function() {
+        // Creates the following node network:
+        // [instruments] -> mixer -> compressor -> speakers (destination)
+        
+        var compressor = this.context.createDynamicsCompressor();
+        compressor.connect(this.context.destination);
+
+        this.mixer = this.context.createGain();
+        this.mixer.connect(compressor);
     };
 
     // Adds the specified sequences to the sequencer.
@@ -192,6 +213,7 @@
             alert('Need at least one sequence');
         else {
             this.playing = true;
+            this.setupMixer();
             this.schedule();
         }
     };
@@ -207,43 +229,103 @@
     };
 
     /**
-     * Plays back a drum snare.
+     * Creates an Attack Decay Sustain Release envelope (ADSR) for the given
+     * AudioNode parameter.
+     *
+     * Notice that larger values of time give shorter intervals for the
+     * parameter, e.g. a decay time of 10 is shorter than a decay time of 3.
+     *
+     * To use purely as attack-decay node, simply leave out the sustain and
+     * release parameters.
+     *
+     * @param {AudioParam} param - The audio parameter to create the envelope
+     * for, e.g. frequency for a sine node or gain for a gain node.
+     * @param {int} startTime - The start time for the envelope.
+     * @param {float} minValue - The minimum value.
+     * @param {float} maxValue - The maximum or peak value.
+     * @param {int} attack - The attack time.
+     * @param {int} decay - The decay time.
+     * @param {float} sustainValue - The value for the sustain.
+     * @param {int} sustain - The sustain time.
+     * @param {int} release - The release time.
+     */
+    Wapi.prototype.ADSREnvelope = function(param, startTime, minValue,
+            maxValue, attack, decay, sustainValue, sustain, release) {
+        // http://en.wikipedia.org/wiki/Synthesizer#ADSR_envelope
+        //
+        // Here is how it looks in ASCII... because we like ASCII.
+        //      /\
+        //     /  \
+        //    /    \
+        //   /      \
+        //  /        \-----\
+        // /                \
+        // A     D    S    R
+        
+        // Set initial value.
+        param.setValueAtTime(0, startTime);
+        
+        // Attack
+        // If the attack is set to 0, it means that there is no attack phase
+        // and the maxValue is set immediately.
+        // This can be useful for frequencies.
+        var attackTime = startTime;
+        if (attack > 0) {
+            attackTime = startTime + 1/attack;
+        }
+        param.linearRampToValueAtTime(maxValue, attackTime);
+
+        // Decay
+        var decayTime = attackTime + 1/decay;
+        sustainValue = sustainValue || minValue;
+        param.linearRampToValueAtTime(sustainValue, decayTime);
+
+        if (sustainValue > 0 && sustain > 0 && release > 0) {
+            // Sustain
+            // Don't do anything except calculate the sustain time.
+            var sustainTime = decayTime + 1/sustain;
+
+            // Release
+            var releaseTime = sustainTime + 1/sustain;
+            param.linearRampToValueAtTime(minValue, releaseTime);
+
+            return releaseTime;
+        }
+        return decayTime;
+    };
+
+    /**
+     * Plays back a very synth-y drum snare.
      *
      * @param {int} time - The time that the instrument will start playing.
      */
     Wapi.prototype.drumSnare = function(time) {
         // A drum snare is a drum synth with some added noise.
         // Node network:
-        // noise -> lowpass_filter -> gain -> destination
+        // noise -> lowpass filter -> gain -> master mixer
         
         var gainNode = this.context.createGain();
-        gainNode.connect(this.context.destination);
+        gainNode.connect(this.mixer);
 
         // How long time the entire beat and gain decay takes.
         var gainDecay = 3;
-        var gainDecayTime = time + 1/gainDecay;
-
-        // How long time it takes for the gain to reach full volume.
-        var gainTime = time + 1/gainDecay/20;
 
         // Make a slight increase in gain in the beginning to simulate a
         // hitting pedal or snare. Basically, go from silence to loud in a very
         // short timespan and then back to silence.
-        gainNode.gain.value = 0;
-        gainNode.gain.setValueAtTime(1, gainTime);
-        gainNode.gain.linearRampToValueAtTime(0, gainDecayTime);
+        var endTime = this.ADSREnvelope(gainNode.gain, time, 0, 1, 0, gainDecay);
 
         // Create new NoiseNode and pass it through a low-pass filter.
         var noise = new NoiseNode(this.context);
         var filter = this.context.createBiquadFilter();
-        filter.type = "lowpass";
+        filter.type = filter.LOWPASS;
         filter.frequency.value = 4000;
         filter.Q.value = 5;
         noise.connect(filter);
         filter.connect(gainNode);
         noise.start(time);
-        noise.stop(gainDecayTime);
-        this.drum(time, this.context.destination, 400, 100, gainDecay, gainDecay);
+        noise.stop(endTime);
+        this.drum(time, this.mixer, 400, 100, gainDecay, gainDecay);
     };
 
     /**
@@ -254,7 +336,7 @@
     Wapi.prototype.drumKick = function(time) {
         // Uses the base drum sound with a 100 -> 50 hertz frequency drop that
         // happens quite fast.
-        this.drum(time, this.context.destination, 100, 50, 60, 10);
+        this.drum(time, this.mixer, 100, 50, 60, 10);
     };
 
     /**
@@ -272,15 +354,19 @@
      * @param {int} gainDecay - The rate at which the gain (volume) decays.
      */
     Wapi.prototype.drum = function(time,
-                                      destination,
-                                      startFrequency,
-                                      endFrequency,
-                                      frequencyDecay,
-                                      gainDecay) {
-        // The drum sound is made by making a drop-off in both frequency and
+                                   destination,
+                                   startFrequency,
+                                   endFrequency,
+                                   frequencyDecay,
+                                   gainDecay) {
+        // The drum sound is just a sine wave with a rapid attack-release
+        // envelope.
+        //
+        // The sound is made by making a rapid drop-off in both frequency and
         // gain (volume).
         // The frequency drop-off is usually faster than the gain drop-off,
         // depending on the given parameters.
+        // See the ADSR envelope function for more details.
 
         // Node network:
         // sine -> gain -> destination
@@ -289,29 +375,83 @@
         sineNode.connect(gainNode);
         gainNode.connect(destination);
 
-        // How long time the frequency decay takes.
-        var freqDecayTime = time + 1/frequencyDecay;
-
-        // setValueAtTime creates an exponential ramp to the given value.
-        sineNode.frequency.value = startFrequency;
-        sineNode.frequency.setValueAtTime(endFrequency, freqDecayTime);
-
-        // How long time the entire beat and gain decay takes.
-        var gainDecayTime = time + 1/gainDecay;
-
-        // How long time it takes for the gain to reach full volume.
-        var gainTime = time + 1/gainDecay/20;
+        // Wrap the sine node's frequency in an envelope.
+        var freqEnd = this.ADSREnvelope(sineNode.frequency, time, endFrequency,
+                                        startFrequency, 0, frequencyDecay);
 
         // Make a slight increase in gain in the beginning to simulate a
         // hitting pedal or snare. Basically, go from silence to loud in a very
         // short timespan and then back to silence.
-        gainNode.gain.value = 0;
-        gainNode.gain.setValueAtTime(1, gainTime);
-        gainNode.gain.linearRampToValueAtTime(0, gainDecayTime);
+        // This is accomplished with an ADSR envelope.
+        var gainEnd = this.ADSREnvelope(gainNode.gain, time, 0, 1,
+                                        1000, gainDecay);
+
+        // Determine when to end playing by taking the largest end time of the
+        // frequency and gain envelopes.
+        var endTime = freqEnd > gainEnd ? freqEnd : gainEnd;
 
         // Start the sine node.
         sineNode.start(time);
-        sineNode.stop(gainDecayTime);
+        sineNode.stop(endTime);
+    };
+
+    /**
+     * Plays a simple saw note. The saw node sounds slightly "noisy".
+     */
+    Wapi.prototype.saw = function(time, note) {
+        // The saw note is just a simple note with a sawtooth waveform.
+        this.simpleNote(time, note, OscillatorNode.SAWTOOTH);
+    };
+
+    /**
+     * Plays a simple piano note. Well, heavily synthesized piano node, that
+     * is.
+     */
+    Wapi.prototype.piano = function(time, note) {
+        // For now, the piano note is just a sine wave.
+        this.simpleNote(time, note, OscillatorNode.SINE);
+    };
+
+    /**
+     * Plays a simple retro note. Calling it retro is probably weird but it
+     * sounds like those good old C64, Amiga or Nintendo sounds.
+     */
+    Wapi.prototype.retro = function(time, note) {
+        // The retro note is a square wave form.
+        this.simpleNote(time, note, OscillatorNode.SQUARE);
+    };
+
+    /**
+     * Plays a simple note with the given note frequency and waveform.
+     *
+     * This function is usually not called directly but through the abstracted
+     * waveform functions such as saw, sine and square.
+     * 
+     * @param {int} time - The start time.
+     * @param {float} note - The note to play.
+     * @param {OscillatorNode.type} type - The type of the waveform.
+     */
+    Wapi.prototype.simpleNote = function(time, note, type) {
+        // Node network:
+        // wave -> gain -> master mixer
+        var node = this.context.createOscillator();
+        node.type = type;
+        var gainNode = this.context.createGain();
+        node.connect(gainNode);
+        gainNode.connect(this.mixer);
+
+        // The frequency of note does not change over time.
+        node.frequency.value = note;
+
+        // Make a slight increase in gain in the beginning to simulate hitting
+        // a key. 
+        // Attack 1000 -> Decay 1000 -> Sustain 3 -> Release 10
+        var endTime = this.ADSREnvelope(gainNode.gain, time, 0, 1,
+                                        1000, 1000, 0.6, 3, 10);
+
+        // Start the sine node.
+        node.start(time);
+        node.stop(endTime);
     };
 
     window.wapi = new Wapi();
