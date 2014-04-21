@@ -1,4 +1,4 @@
-(function(wapi) {
+var drumsExample = function() {
     wapi.reset();
     wapi.loop = false;
 
@@ -27,12 +27,8 @@
             wapi.drumSnare(time);
     };
 
-
     wapi.addSequence(seq2);
     wapi.addSequence(seq2);
     wapi.addSequence(seq2);
     wapi.addSequence(seq3);
-
-    // Don't play it. Let the user decide that...
-
-})(window.wapi);
+}

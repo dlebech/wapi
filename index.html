@@ -5,10 +5,20 @@
     <title>Wapi example</title>
 </head>
 <body>
-    Press play to play a short sequence.
+    <p>Load an example and start playing</p>
+    <ul>
+        <li><a href="#" onclick="keyboardExample(); return false;">Frère Jacques</a></li>
+        <li><a href="#" onclick="drumsExample(); return false;">Drums</a></li>
+        <li><a href="#" onclick="bassExample(); return false;">Bass</a></li>
+    </ul>
+    <div>
+        <button type="button" onclick="wapi.play();">Play</button>
+        <button type="button" onclick="wapi.stop();">Stop</button>
+    </div>
     <script src="js/wapi.js"></script>
+    <script src="js/examples/keyboard.js"></script>
     <script src="js/examples/drums.js"></script>
-    <button type="button" onclick="wapi.play();">Play</button>
-    <button type="button" onclick="wapi.stop();">Stop</button>
+    <script src="js/examples/bass.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 </body>
 </html>

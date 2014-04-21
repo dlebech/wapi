@@ -21,7 +21,25 @@ Features
 * A simple sequencer.
 * Instruments
   * Drum kick
-  * Drum snare
+  * Drum snare (needs extra tweaking)
+  * Electro synth bass
+  * Simple notes (needs extra tweaking)
+    * Piano-ish notes
+    * Saw notes
+    * Retro notes (square)
+
+Documentation
+-------------
+[jsdoc documentation](https://davidlebech.com/wapi/docs) (not very complete)
+
+To manually create the documentation for wapi, the following commands can be
+run:
+
+    npm install -g jsdoc
+    // or
+    npm install
+
+    jsdoc -d docs js/wapi.js
 
 License
 -------

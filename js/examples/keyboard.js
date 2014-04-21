@@ -1,4 +1,4 @@
-(function(wapi) {
+var keyboardExample = function() {
     wapi.reset();
     wapi.loop = false;
 
@@ -75,7 +75,4 @@
 
     wapi.addSequence(seq4);
     wapi.addSequence(seq4);
-
-    // Don't play it. Let the user decide that...
-
-})(window.wapi);
+}
