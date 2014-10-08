@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Wapi example</title>
-    <script data-main="js/app.js" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js"></script>
+    <script src="/js/require.min.js"></script>
 </head>
 <body>
     <p>Load an example and start playing</p>
@@ -15,10 +15,30 @@
     <div>
         <button type="button" onclick="Wapi.play();">Play</button>
         <button type="button" onclick="Wapi.stop();">Stop</button>
-        <button type="button" onclick="Wapi.visualizeAt('cElem');">Visualize</button>
     </div>
-    <div>
-        <canvas id="cElem" width="400" height="400"></canvas>
+    <div id="canvas-container">
     </div>
+    <script>
+        function start() {
+            visualize();
+        }
+
+        function visualize() {
+            var canvas = Wapi.createFrequencyGraph(512, 256);
+            document.getElementById('canvas-container').appendChild(canvas);
+        }
+
+        requirejs.config({
+            baseUrl: '/js',
+
+            // Ensure everything gets loaded every time.
+            urlArgs: 'ts=' + (new Date()).getTime()
+        });
+        
+        requirejs(['wapi', 'examples/keyboard', 'examples/drums', 'examples/bass'],
+            function() {
+                start();
+            });
+    </script>
 </body>
 </html>

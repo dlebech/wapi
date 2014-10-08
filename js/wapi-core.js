@@ -154,9 +154,15 @@ define(function() {
         // when multiple sounds are playing at the same time.
         this.mixer = this.context.createGain();
 
+        // Create a compressor and send the master mix to this compressor.
         var compressor = this.context.createDynamicsCompressor();
         this.mixer.connect(compressor);
-        compressor.connect(this.context.destination);
+
+        // Create an analyser and connect the compressor to the analyser.
+        // The analyser is the last node before final output.
+        this.analyser = this.context.createAnalyser();
+        compressor.connect(this.analyser);
+        this.analyser.connect(this.context.destination);
     };
 
     // Fetches the next beat from the currently playing sequence.

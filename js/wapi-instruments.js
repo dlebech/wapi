@@ -8,6 +8,18 @@ define(['wapi-core'], function(Wapi) {
      */
 
     /**
+     * Plays a simple, clean note.
+     * @param {int} time - The time that the instrument will start playing.
+     * @param {float} note - The wapi.NOTES note to play.
+     * @method 
+     * @memberof Wapi
+     */
+    Wapi.prototype.clean = function(time, note) {
+        // For now, the piano note is just a sine wave.
+        this.simpleNote(time, note, 'sine');
+    };
+
+    /**
      * Plays a simple saw note. The saw node sounds slightly "noisy".
      * @param {int} time - The time that the instrument will start playing.
      * @param {float} note - The wapi.NOTES note to play.
@@ -16,20 +28,7 @@ define(['wapi-core'], function(Wapi) {
      */
     Wapi.prototype.saw = function(time, note) {
         // The saw note is just a simple note with a sawtooth waveform.
-        this.simpleNote(time, note, OscillatorNode.SAWTOOTH);
-    };
-
-    /**
-     * Plays a simple piano note. Well, heavily synthesized piano node, that
-     * is.
-     * @param {int} time - The time that the instrument will start playing.
-     * @param {float} note - The wapi.NOTES note to play.
-     * @method 
-     * @memberof Wapi
-     */
-    Wapi.prototype.piano = function(time, note) {
-        // For now, the piano note is just a sine wave.
-        this.simpleNote(time, note, OscillatorNode.SINE);
+        this.simpleNote(time, note, 'sawtooth');
     };
 
     /**
@@ -42,7 +41,7 @@ define(['wapi-core'], function(Wapi) {
      */
     Wapi.prototype.retro = function(time, note) {
         // The retro note is a square wave form.
-        this.simpleNote(time, note, OscillatorNode.SQUARE);
+        this.simpleNote(time, note, 'square');
     };
 
     /**

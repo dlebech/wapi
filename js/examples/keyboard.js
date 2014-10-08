@@ -5,7 +5,7 @@ require(['wapi'], function(Wapi) {
         Wapi.reset();
         Wapi.loop = false;
     
-        var keyboardFunc = Wapi.piano.bind(Wapi);
+        var keyboardFunc = Wapi.clean.bind(Wapi);
     
         // Play Frère Jacques.
         // Aka. Brother John / Brother Peter / Are You Sleeping? / Mester Jacob
