@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Wapi example</title>
-    <script src="/js/require.min.js"></script>
+    <script src="js/require.min.js"></script>
 </head>
 <body>
     <p>Load an example and start playing</p>
@@ -29,7 +29,7 @@
         }
 
         requirejs.config({
-            baseUrl: '/js',
+            baseUrl: 'js',
 
             // Ensure everything gets loaded every time.
             urlArgs: 'ts=' + (new Date()).getTime()
