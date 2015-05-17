@@ -12,7 +12,7 @@ The code is heavily commented as part of the learning process.
 
 Examples
 --------
-[Live example](https://davidlebech.com/wapi).
+[Live example](https://davidlebech.com/wapi/examples).
 
 Or take a look at the examples folder.
 
@@ -28,18 +28,30 @@ Features
     * Saw notes
     * Retro notes (square)
 
+Vision
+------
+Since starting this project a year ago, I've learned a lot about audio
+synthesis and working with digital music. My go-to DAW is Reaper, but I really
+like the idea of getting closer to the core of the music design. The Web Audio
+API allows some very basic building blocks, and my hope is to slowly build up a
+framework that allows me to play with music production in the browser. It's
+probably not going to turn into a full-fletched DAW, but for anyone who might
+be reading this, that's the idea. Maybe I should write a blog post instead :-)
+
+There's a few spin-off projects related to sound that I have been exploring.
+One that has been mostly on my mind is how to turn a photo into a soundscape.
+This has been researched for years and I'm pretty sure I cannot come up with
+something useful, but the idea is there, and I hope that my first "plugin" for
+Wapi will be a photo-to-audio synthesis tool. More info on this later.
+
 Documentation
 -------------
-[jsdoc documentation](https://davidlebech.com/wapi/docs) (not very complete)
-
 To manually create the documentation for wapi, the following commands can be
 run:
 
-    npm install -g jsdoc
-    // or
-    npm install
+    node_modules/.bin/jsdoc -d docs js/wapi.js
 
-    jsdoc -d docs js/wapi.js
+There will be github page for this project soon... or sometime at least.
 
 License
 -------
