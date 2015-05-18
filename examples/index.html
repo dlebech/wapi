@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Wapi example</title>
+    <script src="/dist/js/wapi.js"></script>
+    <script src="/examples/js/bass.js"></script>
+    <script src="/examples/js/drums.js"></script>
+</head>
+<body>
+    <p>Load an example and start playing</p>
+    <ul>
+        <li><a href="#" onclick="drumsExample(); return false;">Drums</a></li>
+        <li><a href="#" onclick="bassExample(); return false;">Bass</a></li>
+    </ul>
+    <h3>Frequency graph</h3>
+    <div id="canvas-container">
+    </div>
+    <script>
+        //var canvas = Wapi.createFrequencyGraph(512, 256);
+        //document.getElementById('canvas-container').appendChild(canvas);
+    </script>
+</body>
+</html>
