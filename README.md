@@ -46,12 +46,11 @@ Wapi will be a photo-to-audio synthesis tool. More info on this later.
 
 Documentation
 -------------
-To manually create the documentation for wapi, the following commands can be
-run:
+To manually create the documentation for wapi:
 
-    node_modules/.bin/jsdoc -d docs js/wapi.js
+    npm run docs
 
-There will be github page for this project soon... or sometime at least.
+Or visit the [generated docs](https://dlebech.github.io/wapi/docs/).
 
 License
 -------

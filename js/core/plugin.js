@@ -1,8 +1,8 @@
 /**
  * Interface for a plugin. A plugin can be an effect or instrument and can be
  * part of a chain of plugins. A plugin is similar to an AudioNode and
- * implements the connect and disconnect methods.
- * @interface
+ * implements the `connect` and `disconnect` methods.
+ * @interface WapiPlugin
  */
 
 /**

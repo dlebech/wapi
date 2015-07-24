@@ -2,16 +2,6 @@
 
 /* global AudioContext */
 
-/**
- * Core module for Wapi. Provides the {@link Wapi} class that includes a basic
- * sequencer, note list and other convenient functions for interfacing with the
- * Web Audio API.
- *
- * @module core/wapi
- * @author David Volquartz Lebech
- * @license MIT
- */
-
 var notes = require('./notes');
 var WapiTrack = require('./track');
 
@@ -34,7 +24,7 @@ var scheduleAheadTime = 0.5;
 /**
  * WAPI, Web audio API. A programmatic DAW. Call it whatever. Mostly a toy,
  * maybe it will grow. No-one knows. But it is very much a work-in-progress.
- * @class Wapi
+ * @module core/wapi
  * @example
  * var wapi = new Wapi();
  *
@@ -67,6 +57,7 @@ function Wapi() {
    * The AudioContext instance that is used to interface with the Web Audio
    * API. All audio plugins use the same context for creating audio nodes,
    * filters, etc.
+   * @memberof module:core/wapi
    */
   this.context = new AudioContext();
 
@@ -75,6 +66,7 @@ function Wapi() {
    * the equal tempered scale where A4 = 440 hertz.
    *
    * @const
+   * @memberof module:core/wapi
    * @example
    * var myNote = Wapi.NOTES.C4;
    */
@@ -82,6 +74,7 @@ function Wapi() {
 
   /**
    * The current beats per minute. Can be changed by the user.
+   * @memberof Wapi
    */
   this.bpm = 120.0;
 
@@ -92,6 +85,7 @@ function Wapi() {
    * instead of the context destination because the master goes through a
    * dynamic compressor that helps mitigate clipping issues when multiple
    * sounds are playing at the same time.
+   * @memberof module:core/wapi
    */
   this.master = new WapiTrack(this.context);
 
@@ -157,6 +151,7 @@ function Wapi() {
 
   /**
    * Starts playback
+   * @memberof module:core/wapi
    */
   this.play = function() {
     playing = true;
@@ -166,6 +161,7 @@ function Wapi() {
 
   /**
    * Stops playback.
+   * @memberof module:core/wapi
    */
   this.stop = function() {
     playing = false;
@@ -173,6 +169,7 @@ function Wapi() {
 
   /**
    * Rewind playback to the beginning.
+   * @memberof module:core/wapi
    */
   this.rewind = function() {
     currentSequenceIndex = 0;
@@ -183,6 +180,7 @@ function Wapi() {
 /**
  * Creates a new track and connects it to the master output by default.
  * @returns {WapiTrack} A new audio track.
+ * @see {@link module:core/track}
  */
 Wapi.prototype.createTrack = function() {
   var track = new WapiTrack(this.context);

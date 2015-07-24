@@ -5,10 +5,13 @@
  * (Middle A (A4) == 440 hertz)
  *
  * @module core/notes
- * @author David Volquartz Lebech
- * @license MIT
+ * @example
+ * > var notes = require('./core/notes');
+ * > notes.A4
+ * 440
+ * > notes['A4']
+ * 440
  */
-
 var notes = {};
 
 // Notes on the same octave start at C and end at B.

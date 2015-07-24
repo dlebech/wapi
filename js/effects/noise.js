@@ -6,7 +6,7 @@
  *
  * Inspired by liv3c0der project.
  *
- * @class
+ * @module effects/noise
  * @author Jan Krutisch
  * @license MIT
  * @param {AudioContext} context - The AudioContext to use for the noise node.

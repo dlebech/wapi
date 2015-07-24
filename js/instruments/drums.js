@@ -5,9 +5,14 @@ var envelope = require('../core/envelope');
 var NoiseNode = require('../effects/noise');
 
 /**
- * A simple drum-set.
+ * A simple drum-set. Implements the {@link WapiInstrument} interface which
+ * means that the different drum sounds are mapped to MIDI keys.
  *
- * @class
+ * List of sounds:
+ * - C4: Kick
+ * - D4: Snare
+ *
+ * @module instruments/drums
  * @implements {WapiPlugin}
  * @implements {WapiInstrument}
  */
@@ -27,17 +32,22 @@ WapiDrums.prototype.connect = function(destination) {
 };
 
 WapiDrums.prototype.noteOn = function(time, note) {
-  if (notes[note] === notes.C4) {
-    this.simpleKick(time);
+  switch (notes[note]) {
+    case notes.C4:
+      this.simpleKick(time);
+      break;
+    case notes.D4:
+      this.simpleSnare(time);
+      break;
   }
-  else {
-    this.simpleSnare(time);
-  }
+};
+
+WapiDrums.prototype.noteOff = function() {
+  /* Empty but implemented to conform with WapiInstrument interface */
 };
 
 /**
  * Plays a very synth-y drum snare.
- *
  * @param {number} time - The time that the instrument will start playing.
  */
 WapiDrums.prototype.simpleSnare = function(time) {

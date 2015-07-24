@@ -11,7 +11,7 @@ var envelope = require('../core/envelope');
  * sustains its tone until a noteOff event is received. The default is false
  * which means that the bass has a short and defined tone.
  *
- * @class
+ * @module instruments/bass
  * @implements {WapiPlugin}
  * @implements {WapiInstrument}
  */

@@ -1,5 +1,9 @@
 /**
  * Interface for a MIDI-like instrument.
+ *
+ * In order for an instrument to be useful, most instruments will also
+ * implement the {@link WapiPlugin} interface.
+ *
  * @interface WapiInstrument
  */
 

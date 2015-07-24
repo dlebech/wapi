@@ -24,7 +24,7 @@
  * @param {int} sustain - The sustain time.
  * @param {int} release - The release time.
  * @returns {float} The end time for the envelope.
- * @class
+ * @module core/envelope
  */
 function ADSREnvelope(param, startTime, minValue,
     maxValue, attack, decay, sustainValue, sustain, release) {

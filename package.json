@@ -19,7 +19,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "jshint": "node_modules/.bin/jshint js/"
+    "jshint": "node_modules/.bin/jshint js/",
+    "docs": "node_modules/.bin/jsdoc js -d docs -r -c .jsdoc -R README.md"
   },
   "repository": {
     "type": "git",

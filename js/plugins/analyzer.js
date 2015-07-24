@@ -5,11 +5,13 @@
  * playing waveform. Provides convenience methods for creating HTML5 canvas
  * elements that display the output of the analysis.
  *
- * @class
+ * @module plugins/analyzer
  * @param {AudioContext} context - The AudioContext to use for the analyzer.
  * @implements {WapiPlugin}
  * @example
  * var analyzer = new Analyzer();
+ * var canvas = analyzer.createFrequencyGraph(300, 300);
+ * document.body.appendChild(canvas);
  */
 var Analyzer = function(context) {
     this.input = context.createAnalyser();
@@ -25,6 +27,13 @@ Analyzer.prototype.connect = function(dest) {
     return this.input.connect(dest.input ? dest.input : dest);
 };
 
+/**
+ * Creates and returns a `canvas` element with a simple frequency bar graph for
+ * the analyzed input data.
+ * @param {number} width - The width of the canvas.
+ * @param {number} height - The height of the canvas.
+ * @returns {Canvas}
+ */
 Analyzer.prototype.createFrequencyGraph = function(width, height) {
     var canvas = document.createElement('canvas');
     canvas.width = width;

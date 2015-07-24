@@ -12,7 +12,7 @@
  * AudioNode.
  *
  * @param {AudioContext} context - The audio context that this track is part of.
- * @class
+ * @module core/track
  */
 function WapiTrack(context) {
   this.context = context;
