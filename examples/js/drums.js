@@ -1,14 +1,19 @@
-window.drumsExample = function() {
+window.drumsExample = function(canvasContainer) {
   var wapi = new Wapi();
 
   // Create a new Wapi track
   var drumTrack = wapi.createTrack();
 
-  // Create a bass from the WapiBass plugin and add it to the track.
+  // Create a drum track from the WapiDrums plugin and add it to the track.
   var drums = new WapiDrums(wapi.context);
   drumTrack.addPlugin(drums);
 
-  // Add simple bass sequence
+  // Create an analyzer
+  var analyzer = new Analyzer(wapi.context);
+  drumTrack.addPlugin(analyzer);
+  canvasContainer.appendChild(analyzer.createFrequencyGraph(300, 300));
+
+  // Add simple drum sequence
   drumTrack.addSequence(function(time, beatIndex) {
     var notes = [];
     if (beatIndex % 4 == 0) {

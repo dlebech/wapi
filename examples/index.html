@@ -10,15 +10,11 @@
 <body>
     <p>Load an example and start playing</p>
     <ul>
-        <li><a href="#" onclick="drumsExample(); return false;">Drums</a></li>
+        <li><a href="#" onclick="drumsExample(document.getElementById('canvas-container')); return false;">Drums</a></li>
         <li><a href="#" onclick="bassExample(); return false;">Bass</a></li>
     </ul>
     <h3>Frequency graph</h3>
     <div id="canvas-container">
     </div>
-    <script>
-        //var canvas = Wapi.createFrequencyGraph(512, 256);
-        //document.getElementById('canvas-container').appendChild(canvas);
-    </script>
 </body>
 </html>

@@ -59,7 +59,7 @@ WapiDrums.prototype.simpleSnare = function(time) {
   // Create new NoiseNode and pass it through a low-pass filter.
   var noise = new NoiseNode(this.context);
   var filter = this.context.createBiquadFilter();
-  filter.type = filter.LOWPASS;
+  filter.type = 'lowpass';
   filter.frequency.value = 4000;
   filter.Q.value = 5;
   noise.connect(filter);
@@ -75,9 +75,9 @@ WapiDrums.prototype.simpleSnare = function(time) {
  * @param {number} time - The time that the instrument will start playing.
  */
 WapiDrums.prototype.simpleKick = function(time) {
-  // Uses the base drum sound with a 100 -> 50 hertz frequency drop that
+  // Uses the base drum sound with a 150 -> 100 hertz frequency drop that
   // happens quite fast.
-  this.simpleDrum(time, this.output, 120, 70, 60, 10);
+  this.simpleDrum(time, this.output, 150, 100, 60, 10);
 };
 
 /**
