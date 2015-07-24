@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Module: core/wapi</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Module: core/wapi</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        
+            
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>WAPI, Web audio API. A programmatic DAW. Call it whatever. Mostly a toy,
+maybe it will grow. No-one knows. But it is very much a work-in-progress.</p></div>
+        
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="core_wapi.js.html">core/wapi.js</a>, <a href="core_wapi.js.html#line24">line 24</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>var wapi = new Wapi();
+
+// Create a new Wapi track
+var bassTrack = wapi.createTrack();
+
+// Create a bass from the ElectroSynthBass plugin and add it to the track.
+var bass = new ElectroSynthBass(wapi.context);
+bassTrack.addPlugin(bass);
+
+// Create a MIDI sequence.
+var sequence = function(time, beatIndex) {
+  var notes = [];
+  if (beatIndex % 4 == 0) {
+    notes.push('C4');
+  }
+  if (beatIndex % 8 == 0) {
+    notes.push('D4');
+  }
+  return notes;
+}
+
+// Add the sequence to Wapi.
+bassTrack.addSequence(sequence);
+
+wapi.play();</code></pre>
+
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id=".this.context"><span class="type-signature">(static) </span>this.context<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <p>The AudioContext instance that is used to interface with the Web Audio
+API. All audio plugins use the same context for creating audio nodes,
+filters, etc.</p>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="core_wapi.js.html">core/wapi.js</a>, <a href="core_wapi.js.html#line62">line 62</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".this.master"><span class="type-signature">(static) </span>this.master<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <p>The master track. Instruments should always connect to this node
+instead of the context destination because the master goes through a
+dynamic compressor that helps mitigate clipping issues when multiple
+sounds are playing at the same time.</p>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="core_wapi.js.html">core/wapi.js</a>, <a href="core_wapi.js.html#line90">line 90</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".this.NOTES"><span class="type-signature">(static, constant) </span>this.NOTES<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <p>An object containing 8 octaves of pre-calculated notes (C0-B7) within
+the equal tempered scale where A4 = 440 hertz.</p>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="core_wapi.js.html">core/wapi.js</a>, <a href="core_wapi.js.html#line73">line 73</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>var myNote = Wapi.NOTES.C4;</code></pre>
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".this.play"><span class="type-signature">(static) </span>this.play<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Starts playback</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="core_wapi.js.html">core/wapi.js</a>, <a href="core_wapi.js.html#line156">line 156</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".this.rewind"><span class="type-signature">(static) </span>this.rewind<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Rewind playback to the beginning.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="core_wapi.js.html">core/wapi.js</a>, <a href="core_wapi.js.html#line174">line 174</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".this.stop"><span class="type-signature">(static) </span>this.stop<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Stops playback.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="core_wapi.js.html">core/wapi.js</a>, <a href="core_wapi.js.html#line166">line 166</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-core_envelope.html">core/envelope</a></li><li><a href="module-core_notes.html">core/notes</a></li><li><a href="module-core_track.html">core/track</a></li><li><a href="module-core_wapi.html">core/wapi</a></li><li><a href="module-effects_noise.html">effects/noise</a></li><li><a href="module-instruments_bass.html">instruments/bass</a></li><li><a href="module-instruments_drums.html">instruments/drums</a></li><li><a href="module-plugins_analyzer.html">plugins/analyzer</a></li></ul><h3>Interfaces</h3><ul><li><a href="WapiInstrument.html">WapiInstrument</a></li><li><a href="WapiPlugin.html">WapiPlugin</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a> on Fri Jul 24 2015 18:01:41 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
