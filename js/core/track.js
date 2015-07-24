@@ -68,13 +68,21 @@ WapiTrack.prototype.scheduleBeat = function(time, sequenceIndex, beatIndex) {
     // TODO: Actually, instead of having a sequence be a function, it might
     // make a bit more sense that it is a 2D array with an entry for each beat
     // and the notes to play for that entry.
-    var notes = this.sequences[sequenceIndex](time, beatIndex);
+    var events = this.sequences[sequenceIndex](time, beatIndex);
     var _this = this;
 
-    // Schedule all the notes for playback.
-    notes.forEach(function(note) {
-      _this.plugins[0].noteOn(time, note);
-    });
+    // Schedule all the notes for playback or pause.
+    if (events.noteOn) {
+      events.noteOn.forEach(function(note) {
+        _this.plugins[0].noteOn(time, note);
+      });
+    }
+
+    if (events.noteOff) {
+      events.noteOff.forEach(function(note) {
+        _this.plugins[0].noteOff(time, note);
+      });
+    }
   }
 };
 

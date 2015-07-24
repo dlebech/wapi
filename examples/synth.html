@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Synth example</title>
+    <script src="/dist/js/wapi.js"></script>
+</head>
+<body>
+    <p>Synth example</p>
+    <h3>Frequency graph</h3>
+    <div id="canvas-container">
+    </div>
+    <script>
+// Inline script FTW :-)
+var wapi = new Wapi();
+
+// Turn down the volume a bit.
+wapi.master.output.gain.value = 0.7;
+
+// Create a new Wapi track
+var synthTrack = wapi.createTrack();
+
+// Create a drum track from the WapiDrums plugin and add it to the track.
+var synth = new WapiSynth(wapi.context);
+synthTrack.addPlugin(synth);
+
+// Create an analyzer
+var analyzer = new Analyzer(wapi.context);
+synthTrack.addPlugin(analyzer);
+document.getElementById('canvas-container')
+  .appendChild(analyzer.createFrequencyGraph(300, 300));
+
+// Play Frère Jacques.
+// Aka. Brother John / Brother Peter / Are You Sleeping? / Mester Jacob
+
+synthTrack.addSequence(function(time, beatIndex) {
+  var notes = [];
+  var off = [];
+
+  if (beatIndex === 0) {
+    notes.push('C4');
+  } else if (beatIndex === 4) {
+    notes.push('D4');
+  } else if (beatIndex === 8) {
+    notes.push('E4');
+  } else if (beatIndex === 12) {
+    notes.push('C4');
+  } else if (beatIndex === 15) {
+    off.push('C4');
+  }
+
+  return {
+    noteOn: notes,
+    noteOff: off
+  };
+});
+
+synthTrack.addSequence(function(time, beatIndex) {
+  var notes = [];
+  var off = [];
+
+  if (beatIndex === 0) {
+    notes.push('C4');
+  } else if (beatIndex === 4) {
+    notes.push('D4');
+  } else if (beatIndex === 8) {
+    notes.push('E4');
+  } else if (beatIndex === 12) {
+    notes.push('C4');
+  } else if (beatIndex === 15) {
+    off.push('C4');
+  }
+
+  return {
+    noteOn: notes,
+    noteOff: off
+  };
+});
+
+synthTrack.addSequence(function(time, beatIndex) {
+  var notes = [];
+  var off = [];
+
+  if (beatIndex === 0) {
+    notes.push('E4');
+  } else if (beatIndex === 4) {
+    notes.push('F4');
+  } else if (beatIndex === 8) {
+    notes.push('G4');
+  } else if (beatIndex === 11) {
+    off.push('C4');
+  }
+
+  return {
+    noteOn: notes,
+    noteOff: off
+  };
+});
+
+synthTrack.addSequence(function(time, beatIndex) {
+  var notes = [];
+  var off = [];
+
+  if (beatIndex === 0) {
+    notes.push('E4');
+  } else if (beatIndex === 4) {
+    notes.push('F4');
+  } else if (beatIndex === 8) {
+    notes.push('G4');
+  } else if (beatIndex === 11) {
+    off.push('C4');
+  }
+
+  return {
+    noteOn: notes,
+    noteOff: off
+  };
+});
+
+synthTrack.addSequence(function(time, beatIndex) {
+  var notes = [];
+  var off = [];
+
+  if (beatIndex === 0) {
+    notes.push('G4');
+  } else if (beatIndex === 2) {
+    notes.push('A4');
+  } else if (beatIndex === 4) {
+    notes.push('G4');
+  } else if (beatIndex === 6) {
+    notes.push('F4');
+  } else if (beatIndex === 8) {
+    notes.push('E4');
+  } else if (beatIndex === 12) {
+    notes.push('C4');
+  } else if (beatIndex === 15) {
+    off.push('C4');
+  }
+
+  return {
+    noteOn: notes,
+    noteOff: off
+  };
+});
+
+synthTrack.addSequence(function(time, beatIndex) {
+  var notes = [];
+  var off = [];
+
+  if (beatIndex === 0) {
+    notes.push('G4');
+  } else if (beatIndex === 2) {
+    notes.push('A4');
+  } else if (beatIndex === 4) {
+    notes.push('G4');
+  } else if (beatIndex === 6) {
+    notes.push('F4');
+  } else if (beatIndex === 8) {
+    notes.push('E4');
+  } else if (beatIndex === 12) {
+    notes.push('C4');
+  } else if (beatIndex === 15) {
+    off.push('C4');
+  }
+
+  return {
+    noteOn: notes,
+    noteOff: off
+  };
+});
+
+synthTrack.addSequence(function(time, beatIndex) {
+  var notes = [];
+  var off = [];
+
+  if (beatIndex === 0) {
+    notes.push('C4');
+  } else if (beatIndex === 4) {
+    notes.push('G3');
+  } else if (beatIndex === 8) {
+    notes.push('C4');
+  } else if (beatIndex === 15) {
+    off.push('C4');
+  }
+
+  return {
+    noteOn: notes,
+    noteOff: off
+  };
+});
+
+synthTrack.addSequence(function(time, beatIndex) {
+  var notes = [];
+  var off = [];
+
+  if (beatIndex === 0) {
+    notes.push('C4');
+  } else if (beatIndex === 4) {
+    notes.push('G3');
+  } else if (beatIndex === 8) {
+    notes.push('C4');
+  } else if (beatIndex === 15) {
+    off.push('C4');
+  }
+
+  return {
+    noteOn: notes,
+    noteOff: off
+  };
+});
+
+//wapi.setSequence(5);
+wapi.play();
+    </script>
+</body>
+</html>

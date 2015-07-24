@@ -169,10 +169,21 @@ function Wapi() {
 
   /**
    * Rewind playback to the beginning.
+   * @param {number} sequenceIndex - The index to rewind to
    * @memberof module:core/wapi
    */
-  this.rewind = function() {
+  this.rewind = function(sequenceIndex) {
     currentSequenceIndex = 0;
+    currentBeatIndex = 0;
+  };
+
+  /**
+   * Set playback at the given sequence time.
+   * @param {number} sequenceIndex - The index to set the play cursor at.
+   * @memberof module:core/wapi
+   */
+  this.setSequence = function(sequenceIndex) {
+    currentSequenceIndex = sequenceIndex;
     currentBeatIndex = 0;
   };
 }
